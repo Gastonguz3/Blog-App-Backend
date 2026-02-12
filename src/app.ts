@@ -1,11 +1,12 @@
 import express from "express"
-import { config } from "dotenv";
-config()
+import dotenv from "dotenv"
+import publicationRouter from "./routes/publicationRoutes.js"
+dotenv.config()
 
 const app = express();
 
 app.use(express.json())
 
-app.get("/api/publication" )
+app.use("/api/publication", publicationRouter )
 
 export default app;

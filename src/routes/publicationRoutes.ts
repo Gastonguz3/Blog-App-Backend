@@ -16,6 +16,6 @@ router.post("/", createPublication);
 router.put("/:id", updatePublication);
 
 //Eliminar publicacion
-router.delete("/id", deletePublication);
+router.delete("/:id", deletePublication);
 
 export default router;
