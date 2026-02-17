@@ -1,32 +1,32 @@
-import Publication from "../models/publicationModel.js";
+import Note from "../models/noteModel.js";
 import { type Request, type Response } from "express";
 
-export const getAllPublications = async (req: Request, res: Response): Promise<void> => {
+export const getAllNotes = async (req: Request, res: Response): Promise<void> => {
   try {
-    const allPublications = await Publication.find();
-    res.status(200).json(allPublications);
+    const allNotes = await Note.find();
+    res.status(200).json(allNotes);
   } catch (error: any) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
-export const getPublicationById = async (req: Request, res: Response): Promise<void> => {
+export const getNoteById = async (req: Request, res: Response): Promise<void> => {
   try {
     const id = req.params.id;
-    const publication = await Publication.findById(id);
-    if (!publication) {
+    const note = await Note.findById(id);
+    if (!note) {
       res.status(404).json({ error: "Publicacion no encontrada" });
       return;
     }
-    res.status(200).json(publication);
+    res.status(200).json(note);
   } catch (error: any) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
-export const createPublication = async (req: Request, res: Response): Promise<void> => {
+export const createNote = async (req: Request, res: Response): Promise<void> => {
   try {
     const { author, description } = req.body;
     if (!author) {
@@ -37,12 +37,12 @@ export const createPublication = async (req: Request, res: Response): Promise<vo
       res.status(400).json({ message: "La descripcion es obligatoria" });
       return;
     }
-    const publication = new Publication({ author, description });
-    const savePublication = await publication.save();
-    if (savePublication) {
+    const note = new Note({ author, description });
+    const saveNote = await note.save();
+    if (saveNote) {
       res.status(201).json({
         message: "Publicacion creada correctamente",
-        publication: savePublication,
+        note: saveNote,
       });
     }
   } catch (error: any) {
@@ -51,27 +51,27 @@ export const createPublication = async (req: Request, res: Response): Promise<vo
   }
 };
 
-export const updatePublication = async (req: Request, res: Response): Promise<void> => {
+export const updateNote = async (req: Request, res: Response): Promise<void> => {
     try {
         const id = req.params.id;
         const {author, description} = req.body;
-        const updatePublication = await Publication.findByIdAndUpdate(id, {author, description}, {new: true} )
-        if(!updatePublication){
+        const updateNote = await Note.findByIdAndUpdate(id, {author, description}, {new: true} )
+        if(!updateNote){
             res.status(404).json({error: "Publicacion no actualizada"})
             return
         }
-        res.status(200).json({message: "Publicacion actualizada correctamente", publication: updatePublication })
+        res.status(200).json({message: "Publicacion actualizada correctamente", note: updateNote })
     } catch (error: any) {
         console.error(`Error al crear la publicacion: ${error}`);
-    res.status(500).json({ error: "Internal Server Error" });
+        res.status(500).json({ error: "Internal Server Error" });
     }
 }
 
-export const deletePublication = async (req: Request, res: Response): Promise<void> => {
+export const deleteNote = async (req: Request, res: Response): Promise<void> => {
     try {
         const id = req.params.id
-        const deletePublication = await Publication.findByIdAndDelete(id);
-        if(!deletePublication){
+        const deleteNote = await Note.findByIdAndDelete(id);
+        if(!deleteNote){
             res.status(404).json({error: "Publicacion no eliminada"})
             return
         }

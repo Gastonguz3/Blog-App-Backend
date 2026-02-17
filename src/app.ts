@@ -1,9 +1,8 @@
 import express from "express";
-import dotenv from "dotenv";
 import cors from "cors";
-import publicationRouter from "./routes/publicationRoutes.js";
+import authRouter from "./routes/authRoutes.js"
+import noteRouter from "./routes/noteRoutes.js";
 
-dotenv.config();
 const app = express();
 
 app.use(
@@ -14,6 +13,7 @@ app.use(
 
 app.use(express.json());
 
-app.use("/api/publication", publicationRouter);
+app.use("/api/publication", noteRouter);
+app.use("/auth", authRouter)
 
 export default app;
