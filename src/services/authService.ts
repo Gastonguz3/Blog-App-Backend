@@ -4,7 +4,7 @@ import { type NextFunction, type Request, type Response } from "express";
 import jwt from "jsonwebtoken";
 
 export const generateToken = (user: UserDocument) => {
-  return jwt.sign({ id: user._id, email: user.email }, ENV.JWT_SECRET, {expiresIn: "1h"});
+  return jwt.sign({ id: user._id, name: user.name, email: user.email }, ENV.JWT_SECRET, {expiresIn: "1h"});
 };
 
 export const authenticateToken = ( req: Request, res: Response, next: NextFunction ) => {
