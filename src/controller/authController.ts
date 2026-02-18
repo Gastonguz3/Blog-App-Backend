@@ -21,14 +21,16 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       res.status(404).json({ error: "Usuario no encontrado" });
       return;
     }
-    const passwordMatch = await comparePassword(user.password, password);
+
+    const passwordMatch = await comparePassword(password, user.password);
     if (!passwordMatch) {
       res.status(401).json({ error: "Credenciales invalidas" });
       return;
     }
 
     const token = generateToken(user);
-    res.status(200).json({ token });
+    res.status(200).json({ token, user: {_id: user._id, name: user.name, email: user.email} });
+    
   } catch (error: any) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -57,13 +59,13 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const hashedPassword = hashPassword(password);
+    const hashedPassword  = await hashPassword(password);
 
     const newUser = new User({ name, password: hashedPassword, email });
     await newUser.save()
 
     const token = generateToken(newUser);
-    res.status(201).json({ message:"Usuario creado correctamente", token });
+    res.status(201).json({ token, user: {_id: newUser._id, name: newUser.name, email: newUser.email} });
 
   } catch (error: any) {
     if (error.code === 11000) {

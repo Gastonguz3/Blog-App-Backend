@@ -13,7 +13,7 @@ app.use(
 
 app.use(express.json());
 
-app.use("/api/publication", noteRouter);
+app.use("/api/note", noteRouter);
 app.use("/auth", authRouter)
 
 export default app;
