@@ -37,16 +37,17 @@ export const createNote = async (req: Request, res: Response): Promise<void> => 
       res.status(400).json({ message: "La descripcion es obligatoria" });
       return;
     }
-    const note = new Note({ author, description });
+    const user = req.user as {id: string} //contiene el jwt verificado
+    const note = new Note({ author, authorId: user.id , description });
     const saveNote = await note.save();
     if (saveNote) {
       res.status(201).json({
-        message: "Publicacion creada correctamente",
+        message: "Nota creada correctamente",
         note: saveNote,
       });
     }
   } catch (error: any) {
-    console.error(`Error al crear la publicacion: ${error}`);
+    console.error(`Error al crear la nota: ${error}`);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -55,12 +56,20 @@ export const updateNote = async (req: Request, res: Response): Promise<void> => 
     try {
         const id = req.params.id;
         const {author, description} = req.body;
-        const updateNote = await Note.findByIdAndUpdate(id, {author, description}, {new: true} )
-        if(!updateNote){
-            res.status(404).json({error: "Publicacion no actualizada"})
+        const note = await Note.findById(id)
+        if(!note){
+            res.status(404).json({error: "Nota no encontrada"})
             return
         }
-        res.status(200).json({message: "Publicacion actualizada correctamente", note: updateNote })
+        const user = req.user as {id: string} 
+        if (note.authorId.toString() !== user.id) {
+          res.status(403).json({ error: "No autorizado para actualizar la nota" });
+          return
+        }
+        note.author = author
+        note.description = description
+        note.save()
+        res.status(200).json({message: "Nota actualizada correctamente", note: updateNote })
     } catch (error: any) {
         console.error(`Error al crear la publicacion: ${error}`);
         res.status(500).json({ error: "Internal Server Error" });
@@ -70,15 +79,23 @@ export const updateNote = async (req: Request, res: Response): Promise<void> => 
 export const deleteNote = async (req: Request, res: Response): Promise<void> => {
     try {
         const id = req.params.id
-        const deleteNote = await Note.findByIdAndDelete(id);
-        if(!deleteNote){
-            res.status(404).json({error: "Publicacion no eliminada"})
+        const note = await Note.findById(id);
+        if(!note){
+            res.status(404).json({error: "Nota no eliminada"})
             return
         }
-        res.status(200).json({message: `Publicacion ${id} eliminada correctamente`}).end()
+        const user = req.user as {id: string}
+
+        if(note.authorId.toString() !== user.id){
+          res.status(403).json({error: "No autorizado para eliminar la nota"})
+          return
+        }
+
+        await note.deleteOne();
+        res.status(200).json({message: `Nota eliminada correctamente`})
         
     } catch (error: any) {
-        console.error(`Error al eliminar la publicacion: ${error}`);
+        console.error(`Error al eliminar la nota: ${error}`);
         res.status(500).json({ error: "Internal Server Error" });
     }
 }

@@ -15,7 +15,8 @@ export const authenticateToken = ( req: Request, res: Response, next: NextFuncti
     return;
   }
   try {
-    jwt.verify(token, ENV.JWT_SECRET);
+    const decoded = jwt.verify(token, ENV.JWT_SECRET);
+    req.user = decoded  //en types/express.d.ts ajusto la configuracion de express para que el request admita user
     next();
   } catch (err: any) {
     console.error("Error en autenticacion:", err);
