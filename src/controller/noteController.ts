@@ -68,8 +68,8 @@ export const updateNote = async (req: Request, res: Response): Promise<void> => 
         }
         note.author = author
         note.description = description
-        note.save()
-        res.status(200).json({message: "Nota actualizada correctamente", note: updateNote })
+        const newNote = note.save()
+        res.status(200).json({message: "Nota actualizada correctamente", note: newNote })
     } catch (error: any) {
         console.error(`Error al crear la publicacion: ${error}`);
         res.status(500).json({ error: "Internal Server Error" });
@@ -81,7 +81,7 @@ export const deleteNote = async (req: Request, res: Response): Promise<void> => 
         const id = req.params.id
         const note = await Note.findById(id);
         if(!note){
-            res.status(404).json({error: "Nota no eliminada"})
+            res.status(404).json({error: "Nota no encontrada"})
             return
         }
         const user = req.user as {id: string}
@@ -95,7 +95,6 @@ export const deleteNote = async (req: Request, res: Response): Promise<void> => 
         res.status(200).json({message: `Nota eliminada correctamente`})
         
     } catch (error: any) {
-        console.error(`Error al eliminar la nota: ${error}`);
         res.status(500).json({ error: "Internal Server Error" });
     }
 }
