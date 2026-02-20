@@ -1,21 +1,16 @@
 import { Schema, Types, model } from "mongoose";
 
 export interface INote {
-  author: string,           //nombre visible
-  authorId: Types.ObjectId  //relacion real
+  author: Types.ObjectId  
   description: string,
   createdAt: Date,
   updatedAt: Date
 }
 
 const NoteSchema = new Schema<INote>({
-  author: {
-    type: String,
-    required: true,
-  },
-  authorId: {
+  author: {                        //Este ObjectId hace referencia al User
     type: Schema.Types.ObjectId,  //tipo de dato que representa un identificador de MongoDB
-    ref: "User",                  //Este ObjectId pertenece a la colección User
+    ref: "User",                  //One to Many: 1 usuario -> Muchas notas 
     required: true
   },
   description: {

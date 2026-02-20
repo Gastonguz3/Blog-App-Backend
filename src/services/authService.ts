@@ -1,7 +1,7 @@
 import { ENV } from "../config/env.js";
 import type { UserDocument } from "../models/userModel.js";
 import { type NextFunction, type Request, type Response } from "express";
-import jwt from "jsonwebtoken";
+import jwt, { type JwtPayload } from "jsonwebtoken";
 
 export const generateToken = (user: UserDocument) => {
   return jwt.sign({ id: user._id, name: user.name, email: user.email }, ENV.JWT_SECRET, {expiresIn: "1h"});
@@ -15,8 +15,12 @@ export const authenticateToken = ( req: Request, res: Response, next: NextFuncti
     return;
   }
   try {
-    const decoded = jwt.verify(token, ENV.JWT_SECRET);
-    req.user = decoded  //en types/express.d.ts ajusto la configuracion de express para que el request admita user
+    const decoded = jwt.verify(token, ENV.JWT_SECRET) as JwtPayload;
+    
+    //en types/express.d.ts ajusto la configuracion de express para que el request admita user
+    req.user = {  
+      id: decoded.id as string
+    } 
     next();
   } catch (err: any) {
     console.error("Error en autenticacion:", err);

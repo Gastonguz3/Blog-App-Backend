@@ -4,8 +4,8 @@ import { deleteUser, updateUsername } from "../controller/userController.js";
 
 const router = express.Router();
 
-router.put("/:id", authenticateToken, updateUsername);
+router.put("/me", authenticateToken, updateUsername);
 
-router.delete("/:id", authenticateToken, deleteUser);
+router.delete("/me", authenticateToken, deleteUser);
 
 export default router;
