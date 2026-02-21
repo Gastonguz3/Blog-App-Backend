@@ -18,7 +18,7 @@ export const getNoteById = async (req: Request, res: Response): Promise<void> =>
     const id = req.params.id;
     const note = await Note.findById(id);
     if (!note) {
-      res.status(404).json({ message: "Publicacion no encontrada" });
+      res.status(404).json({ message: "Nota no encontrada" });
       return;
     }
     res.status(200).json(note);
@@ -78,7 +78,7 @@ export const updateNote = async (req: Request, res: Response): Promise<void> => 
 
         res.status(200).json({message: "Nota actualizada correctamente", note: updatedNote })
     } catch (error: any) {
-        console.error(`Error al crear la publicacion: ${error}`);
+        console.error(`Error al crear la nota: ${error}`);
         res.status(500).json({ message: "Internal Server Error" });
     }
 }
