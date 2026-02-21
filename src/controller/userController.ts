@@ -20,7 +20,8 @@ export const updateUsername = async (req: Request,res: Response): Promise<void> 
     res.status(200).json({ message: "Usuario actualizado correctamente", user: updatedUser });
 
   } catch (error: any) {
-    res.status(500).json({ error: "Internal Server Error" });
+    console.log(error)
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -42,6 +43,7 @@ export const deleteUser = async (req: Request, res: Response): Promise<void> => 
     res.status(200).json({ message: `Usuario ${user.name} eliminado correctamente` });
     
   } catch (error: any) {
-    res.status(500).json({ error: "Internal Server Error" });
+    console.log(error)
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };

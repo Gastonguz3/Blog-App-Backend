@@ -3,7 +3,8 @@ import {Schema, model, type HydratedDocument } from "mongoose";
 export interface IUser {
     name: string,
     password: string,
-    email: string
+    email: string,
+    isVerified: boolean
 }
 
 const userSchema = new Schema<IUser>({
@@ -21,6 +22,10 @@ const userSchema = new Schema<IUser>({
         required: true,
         unique: true,
         lowercase: true
+    },
+    isVerified: {     //Para verificar el mail del usuario
+        type: Boolean,
+        default: false
     }
 }, {timestamps: true})
 

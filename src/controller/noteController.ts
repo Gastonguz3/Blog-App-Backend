@@ -9,7 +9,7 @@ export const getAllNotes = async (req: Request, res: Response): Promise<void> =>
     res.status(200).json(allNotes);
   } catch (error: any) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -18,13 +18,13 @@ export const getNoteById = async (req: Request, res: Response): Promise<void> =>
     const id = req.params.id;
     const note = await Note.findById(id);
     if (!note) {
-      res.status(404).json({ error: "Publicacion no encontrada" });
+      res.status(404).json({ message: "Publicacion no encontrada" });
       return;
     }
     res.status(200).json(note);
   } catch (error: any) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -47,7 +47,7 @@ export const createNote = async (req: Request, res: Response): Promise<void> => 
     }
   } catch (error: any) {
     console.error(`Error al crear la nota: ${error}`);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -59,7 +59,7 @@ export const updateNote = async (req: Request, res: Response): Promise<void> => 
         const note = await Note.findById(id)
 
         if(!note){
-            res.status(404).json({error: "Nota no encontrada"})
+            res.status(404).json({message: "Nota no encontrada"})
             return
         }
         //viene del middleware authenticateToken
@@ -67,7 +67,7 @@ export const updateNote = async (req: Request, res: Response): Promise<void> => 
 
         //Verifico que el usuario sea el dueño
         if (note.author.toString() !== userId) {
-          res.status(403).json({ error: "No autorizado para actualizar la nota" });
+          res.status(403).json({ message: "No autorizado para actualizar la nota" });
           return
         }
 
@@ -79,7 +79,7 @@ export const updateNote = async (req: Request, res: Response): Promise<void> => 
         res.status(200).json({message: "Nota actualizada correctamente", note: updatedNote })
     } catch (error: any) {
         console.error(`Error al crear la publicacion: ${error}`);
-        res.status(500).json({ error: "Internal Server Error" });
+        res.status(500).json({ message: "Internal Server Error" });
     }
 }
 
@@ -88,7 +88,7 @@ export const deleteNote = async (req: Request, res: Response): Promise<void> => 
         const id = req.params.id
         const note = await Note.findById(id);
         if(!note){
-            res.status(404).json({error: "Nota no encontrada"})
+            res.status(404).json({message: "Nota no encontrada"})
             return
         }
         //viene del middleware authenticateToken
@@ -96,7 +96,7 @@ export const deleteNote = async (req: Request, res: Response): Promise<void> => 
 
         //Solo el dueño puede borrar
         if(note.author.toString() !== user.id){
-          res.status(403).json({error: "No autorizado para eliminar la nota"})
+          res.status(403).json({message: "No autorizado para eliminar la nota"})
           return
         }
 
@@ -104,6 +104,6 @@ export const deleteNote = async (req: Request, res: Response): Promise<void> => 
         res.status(200).json({message: `Nota eliminada correctamente`})
         
     } catch (error: any) {
-        res.status(500).json({ error: "Internal Server Error" });
+        res.status(500).json({ message: "Internal Server Error" });
     }
 }

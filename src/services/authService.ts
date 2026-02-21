@@ -4,14 +4,14 @@ import { type NextFunction, type Request, type Response } from "express";
 import jwt, { type JwtPayload } from "jsonwebtoken";
 
 export const generateToken = (user: UserDocument) => {
-  return jwt.sign({ id: user._id, name: user.name, email: user.email }, ENV.JWT_SECRET, {expiresIn: "1h"});
+  return jwt.sign({ id: user._id, name: user.name, email: user.email }, ENV.JWT_SECRET, {expiresIn: "1d"});
 };
 
 export const authenticateToken = ( req: Request, res: Response, next: NextFunction ) => {
   const authHeader = req.headers.authorization;
   const token = authHeader?.split(" ")[1];
   if (!token) {
-    res.status(401).json({ error: "No autorizado" });
+    res.status(401).json({ message: "No autorizado" });
     return;
   }
   try {
@@ -24,6 +24,10 @@ export const authenticateToken = ( req: Request, res: Response, next: NextFuncti
     next();
   } catch (err: any) {
     console.error("Error en autenticacion:", err);
-    return res.status(403).json({ error: "Token inválido o expirado" });
+    return res.status(403).json({ message: "Sesion inválida o expirada" }); //Token invalido
   }
 };
+
+export const generateEmailToken = (user: UserDocument) => {
+   return jwt.sign({ id: user._id }, ENV.JWT_SECRET,{ expiresIn: "1d" });
+} 

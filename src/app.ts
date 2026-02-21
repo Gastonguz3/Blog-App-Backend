@@ -3,12 +3,13 @@ import cors from "cors";
 import authRouter from "./routes/authRoutes.js"
 import noteRouter from "./routes/noteRoutes.js";
 import userRouter from "./routes/userRoutes.js";
+import { ENV } from "./config/env.js";
 
 const app = express();
 
 app.use(
   cors({
-    origin: ["http://localhost:5173"]
+    origin: [`${ENV.FRONTEND_URL}`]
   }),
 );
 
