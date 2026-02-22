@@ -1,27 +1,24 @@
-import nodemailer from "nodemailer";
-import { ENV } from "./env.js";
+import { Resend } from "resend";
+import {ENV} from "./env.js"
 
-export const sendVerificationEmail = async (email: string, token: string) => {
+const resend = new Resend(ENV.RESEND_API_KEY);
 
-  const transporter = nodemailer.createTransport({
-    host: ENV.EMAIL_HOST,
-    port: 587,
-    auth: {
-      user: ENV.EMAIL_USER,
-      pass: ENV.EMAIL_PASS,
-    },
-  });
-
+export const sendVerificationEmail = async ( email: string, token: string) => {
   const url = `${ENV.FRONTEND_URL}/verify/${token}`;
 
-  await transporter.sendMail({
-    from: ENV.EMAIL_USER,
+  const { error } = await resend.emails.send({
+    from: "<onboarding@resend.dev>",
     to: email,
     subject: "Verifica tu cuenta",
     html: `
-      <h1>Gracias por completar el formulario de registro en mi Blog App </h1>
+      <h1>Gracias por registrarte en Blog App</h1>
       <h2>Verifica tu cuenta:</h2>
       <a href="${url}">Click aquí para verificar</a>
     `,
   });
+
+  if (error) {
+    console.error("Error enviando mail:", error);
+    throw new Error("No se pudo enviar el email");
+  }
 };

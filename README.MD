@@ -16,7 +16,7 @@ Para ver el **codigo del frontend** [ingrese aca](https://github.com/Gastonguz3/
 * JWT (JSON Web Token)
 * TypeScript
 * Bycript
-* Nodemailer
+* Resend
 
 ## Arquitectura
 
