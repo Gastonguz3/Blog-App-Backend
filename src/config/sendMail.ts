@@ -4,7 +4,7 @@ import {ENV} from "./env.js"
 const resend = new Resend(ENV.RESEND_API_KEY);
 
 export const sendVerificationEmail = async ( email: string, token: string) => {
-  const url = `${ENV.FRONTEND_URL}/#/verify/${token}`;
+  const url = `${ENV.FRONTEND_URL}/Blog-App-Frontend/#/verify/${token}`;
 
   const { error } = await resend.emails.send({
     from: "Blog App <onboarding@resend.dev>",
