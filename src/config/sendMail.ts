@@ -7,7 +7,7 @@ export const sendVerificationEmail = async ( email: string, token: string) => {
   const url = `${ENV.FRONTEND_URL}/verify/${token}`;
 
   const { error } = await resend.emails.send({
-    from: "<onboarding@resend.dev>",
+    from: "Blog App <onboarding@resend.dev>",
     to: email,
     subject: "Verifica tu cuenta",
     html: `
