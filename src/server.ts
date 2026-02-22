@@ -6,4 +6,7 @@ connectDB().then(() => {
   app.listen(ENV.PORT, () => {
     console.log(`Server Running on port ${ENV.PORT}`);
   });
-});
+})
+.catch((err) => {
+  console.error(`Database connection fail ${err}`)
+})
